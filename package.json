@@ -1,0 +1,28 @@
+{
+  "name": "full-stack-challenge",
+  "version": "0.0.1",
+  "description": "Full-stack Challenge to Robos.in",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maisonChaves/Full-stack-Challenge.git"
+  },
+  "keywords": [
+    "full-stack",
+    "challenge",
+    "robos.im"
+  ],
+  "author": "Maison Chaves",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maisonChaves/Full-stack-Challenge/issues"
+  },
+  "homepage": "https://github.com/maisonChaves/Full-stack-Challenge#readme",
+  "devDependencies": {
+    "webpack": "^2.6.0"
+  }
+}
