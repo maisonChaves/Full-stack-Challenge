@@ -3,10 +3,39 @@
 var Koa = require('koa');
 var Router = require('koa-router');
 const MongoClient = require('mongodb').MongoClient;
+var request = require('request');
+var fs = require('fs');
 
 var app = new Koa();
 var router = new Router();
 var db;
+var token = fs.readFileSync('.bot', 'utf8');
+var urlBase = 'https://api.telegram.org/bot' + token + '/';
+
+var getUpdates = () => {
+  request.get(urlBase + 'getUpdates', (error, response, body) => {
+
+      var updates = JSON.parse(body).result;
+
+      for (var update of updates) {
+        //sendMessage(update.message)
+      }
+
+  });
+};
+
+var sendMessage = message => {
+
+  request.post(urlBase + 'sendMessage').form({
+    "chat_id": message.chat.id,
+    "text": message.from.first_name + " you sad? " + message.text
+  });
+
+}
+
+//setInterval(getUpdates, 1500);
+
+getUpdates();
 
 router.get('/', function (ctx) {
   ctx.body = 'Hello from Koajs using router';
