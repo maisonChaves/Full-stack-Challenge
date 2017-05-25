@@ -1,23 +1,37 @@
-var path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
-    entry: './app.js',
-    output: {
-        path: path.resolve(__dirname, 'build'),
-        filename: 'main.bundle.js'
-    },
-    module: {
-        loaders: [{
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: 'babel-loader',
-            query: {
-                presets: ['es2015']
-            }
-        }],
-    },
-    stats: {
-        colors: true
-    },
-    devtool: 'source-map'
+	entry: './src/index.js',
+	output: {
+		path: '/',
+		filename: 'bundle.js',
+		publicPath: 'http://localhost:8080/'
+	},
+	//devtool: 'source-map',
+	module: {
+		loaders: [{
+			test: /\.js$/,
+			loader: 'babel-loader'
+		}, {
+			test: /\.css$/,
+			loader: "style-loader!css-loader"
+		}]
+	},
+	devServer: {
+		contentBase: './',
+		port: 8080,
+		noInfo: false,
+		hot: true,
+		inline: true,
+		proxy: {
+			'/': {
+				bypass: function (req, res, proxyOptions) {
+					return '/public/index.html';
+				}
+			}
+		}
+	},
+	plugins: [
+		new webpack.HotModuleReplacementPlugin()
+	]
 };
