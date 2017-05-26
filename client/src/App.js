@@ -1,16 +1,19 @@
-export default function App() {
+export default function App({ children }) {
     return (
-        <section class="hero is-dark">
-            <div class="hero-body">
-                <div class="container">
-                    <h1 class="title">
-                        Maison Chaves Bot
+        <div>
+            <section class="hero is-dark">
+                <div class="hero-body">
+                    <div class="container">
+                        <h1 class="title">
+                            Maison Chaves Bot
                     </h1>
-                    <h2 class="subtitle">
-                        Welcome to chat bot manager.
+                        <h2 class="subtitle">
+                            Welcome to chat bot manager.
                     </h2>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+            {children}
+        </div>
     );
 }

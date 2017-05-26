@@ -4,7 +4,7 @@ import { Router, Route } from 'inferno-router';
 import createBrowserHistory from 'history/createBrowserHistory';
 
 import App from './App';
-import VersionComponent from './VersionComponent';
+import LoginForm from './LoginForm';
 
 if (module.hot) {
     require('inferno-devtools');
@@ -15,7 +15,9 @@ const browserHistory = createBrowserHistory();
 
 const routes = (
 	<Router history={ browserHistory }>
-		<Route component={ App } />
+		<Route component={ App }>
+			<Route path="/" component={ LoginForm } />
+		</Route>
 	</Router>
 );
 
