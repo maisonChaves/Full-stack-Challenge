@@ -5,6 +5,8 @@ import createBrowserHistory from 'history/createBrowserHistory';
 
 import App from './App';
 import LoginForm from './LoginForm';
+import Chats from './Chats';
+import Chat from './Chat';
 
 if (module.hot) {
     require('inferno-devtools');
@@ -15,8 +17,11 @@ const browserHistory = createBrowserHistory();
 
 const routes = (
 	<Router history={ browserHistory }>
-		<Route component={ 	App }>
+		<Route component={ App }>
 			<Route path="/" component={ LoginForm } fb={FB} />
+			<Route component={ Chats } >
+				<Route path="/chats" component={Chat} />
+			</Route>
 		</Route>
 	</Router>
 );

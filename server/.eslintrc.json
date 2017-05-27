@@ -1,4 +1,5 @@
 {
+    "plugins": ["async-await"],
     "env": {
         //"browser": true,
         //"commonjs": true,
@@ -19,6 +20,8 @@
         "no-unreachable": "warn",
         "no-unused-vars": "warn",
         "constructor-super": "warn",
-        "valid-typeof": "warn"
+        "valid-typeof": "warn",
+        "async-await/space-after-async": 2,
+        "async-await/space-after-await": 2
     }
 }
