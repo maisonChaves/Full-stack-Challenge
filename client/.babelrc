@@ -2,9 +2,23 @@
     "env": {
         "development": {
             "presets": [
-                ["es2015", {"loose": true, "modules": false}], "stage-0"
+                ["es2015", {
+                    "loose": true,
+                    "modules": false
+                }], "stage-0"
             ]
         }
     },
-    "plugins": ["babel-plugin-syntax-jsx", ["babel-plugin-inferno", {"imports": true}]]
+    "plugins": [
+        "babel-plugin-syntax-jsx", ["babel-plugin-inferno", {
+            "imports": true
+        }],
+        ["module-resolver", {
+            "root": ["."],
+            "alias": {
+                "react": "inferno-compat",
+                "react-dom": "inferno-compat"
+            }
+        }]
+    ]
 }

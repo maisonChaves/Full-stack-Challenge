@@ -33,5 +33,11 @@ module.exports = {
 	},
 	plugins: [
 		new webpack.HotModuleReplacementPlugin()
-	]
+	],
+	resolve: {
+		alias: {
+			'react': 'inferno-compat',
+			'react-dom': 'inferno-compat'
+		}
+	}
 };

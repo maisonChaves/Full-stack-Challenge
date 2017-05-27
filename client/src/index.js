@@ -15,8 +15,8 @@ const browserHistory = createBrowserHistory();
 
 const routes = (
 	<Router history={ browserHistory }>
-		<Route component={ App }>
-			<Route path="/" component={ LoginForm } />
+		<Route component={ 	App }>
+			<Route path="/" component={ LoginForm } fb={FB} />
 		</Route>
 	</Router>
 );
