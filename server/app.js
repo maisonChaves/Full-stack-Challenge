@@ -53,8 +53,9 @@ router.post('/getUpdates', body, async(ctx, next) => {
   var results = ctx.request.body.result;
 
   for (var result of results) {
-    //console.log(result.message.chat);
-    await db.Chat.insertOne(result.message.chat);
+      var chat = result.message.chat;
+      chat._id = chat.id;
+      await db.Chat.save(chat);
   }
 
   ctx.status = 200;
@@ -65,6 +66,7 @@ router.get('/date', (ctx) => {
 });
 
 router.get('/chats', async(ctx, next) => {
+  ctx.set('Access-Control-Allow-Origin', '*');
   ctx.body = await db.Chat.find();
 });
 
