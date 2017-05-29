@@ -14,12 +14,12 @@ class Model {
         return operation.ops[0];
     }
 
-    async find() {
-
-        const result = await this.db.collection(this.name).find();
+    async find(query) {
+        const result = await this.db.collection(this.name).find(query);
         if (!result) {
             throw new Error('Db find error');
         }
+
         return result.toArray();
     }
 

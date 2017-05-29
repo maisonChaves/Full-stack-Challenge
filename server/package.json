@@ -45,6 +45,7 @@
     "koa-mongo": "^0.7.0",
     "koa-router": "^7.1.1",
     "mongodb": "^2.2.27",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
   }
 }

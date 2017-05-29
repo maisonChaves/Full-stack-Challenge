@@ -8,6 +8,7 @@ class Db {
         if (!db) {
             db = await MongoClient.connect(config.db.url);
             this.Chat = new Model(db, 'chat');
+            this.Message = new Model(db, 'message');
         }
     }
 };

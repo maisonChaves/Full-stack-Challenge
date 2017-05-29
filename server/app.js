@@ -4,7 +4,9 @@ var Koa = require('koa');
 var Router = require('koa-router');
 var Body = require('koa-body');
 
-var request = require('request');
+//var request = require('request');
+var request = require('request-promise');
+
 var fs = require('fs');
 
 const config = require('config');
@@ -16,8 +18,6 @@ var router = new Router();
 var body = new Body();
 var token = fs.readFileSync('.bot', 'utf8');
 var urlBase = 'https://api.telegram.org/bot' + token + '/';
-
-//app.use(mongo());
 
 var getUpdates = () => {
   request.get(urlBase + 'getUpdates', (error, response, body) => {
@@ -31,18 +31,17 @@ var getUpdates = () => {
   });
 };
 
-var sendMessage = message => {
-
-  request.post(urlBase + 'sendMessage').form({
-    "chat_id": message.chat.id,
-    "text": message.from.first_name + " you sad? " + message.text
-  });
-
+var sendMessage = async message => {
+  return await request.post(urlBase + 'sendMessage', {form: message});
 }
 
-//setInterval(getUpdates, 1500);
+var setHeader = async (ctx, next) => {
+  await next();
+  ctx.set('Access-Control-Allow-Origin', '*');
+  ctx.set('Access-Control-Allow-Headers', 'content-type');
+}
 
-getUpdates();
+app.use(setHeader);
 
 router.get('/', (ctx) => {
   ctx.body = 'Hello from Koajs using router';
@@ -56,18 +55,37 @@ router.post('/getUpdates', body, async(ctx, next) => {
       var chat = result.message.chat;
       chat._id = chat.id;
       await db.Chat.save(chat);
+
+      var message = result.message;
+      message._id = message.message_id;
+      await db.Message.save(message);
   }
 
   ctx.status = 200;
 });
 
-router.get('/date', (ctx) => {
-  ctx.body = new Date().toLocaleString();
+router.post('/sendMessage', body, async(ctx, next) => {
+  var update = await sendMessage(ctx.request.body);
+
+  var message = JSON.parse(update).result;
+  message._id = message.message_id;
+
+  await db.Message.save(message);
+
+  ctx.body = message;
 });
 
-router.get('/chats', async(ctx, next) => {
-  ctx.set('Access-Control-Allow-Origin', '*');
+router.get('/chats', async (ctx, next) => {
   ctx.body = await db.Chat.find();
+});
+
+router.get('/chat/:id', async (ctx, next) => {
+
+  var query = {
+    "chat.id" : parseInt(ctx.params.id)
+  }
+
+  ctx.body = await db.Message.find(query);
 });
 
 app

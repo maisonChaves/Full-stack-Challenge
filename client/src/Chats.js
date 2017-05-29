@@ -1,32 +1,51 @@
-import Inferno from 'inferno';
+import Inferno, { linkEvent } from 'inferno';
 import Component from 'inferno-component';
 
 import Service from './Service';
+import Chat from './Chat';
+
+function getChat(obj) {
+    const id = obj.id;
+    const instance = obj.instance;
+
+    instance.setState({
+        active: id
+    });
+
+    Service.getChat(id)
+        .then(
+        res => {
+            instance.setState({
+                messages: res
+            });
+        },
+        error => {
+            instance.setState({
+                error: error
+            });
+        });
+
+}
 
 class Chats extends Component {
-//export default function Chats({ children }) {
 
     constructor() {
         super();
 
-        // Set default loading state to false
         this.state = {
             chats: []
         };
     }
 
     componentDidMount() {
-        // GET list of dinosaurs from API
         Service.getChats()
             .then(
             res => {
-                // Set state with fetched dinos list
                 this.setState({
                     chats: res
                 });
             },
             error => {
-                // An error occurred, set state with error
                 this.setState({
                     error: error
                 });
@@ -34,7 +53,9 @@ class Chats extends Component {
     }
 
     render(children, state) {
-        return (<div class="columns">
+        return (
+            <div class="container">
+        <div class="columns">
             <div class="column is-one-third">
                 <nav class="panel">
                     <p class="panel-heading">
@@ -44,7 +65,9 @@ class Chats extends Component {
                     {
                         state.chats.length > 0 ? (
                             state.chats.map((chat) => (
-                                <a class="panel-block is-active">
+                                <a 
+                                    className={state.active === chat.id ? 'panel-block is-active' : 'panel-block'}
+                                    onClick={linkEvent({id: chat.id, instance: this}, getChat)}>
                                     {chat.first_name + ' ' + chat.last_name}
                                 </a>
                             ))
@@ -57,8 +80,10 @@ class Chats extends Component {
 
                 </nav>
             </div>
-            <div class="column">{children}</div>
-        </div>)
+            <div class="column">
+                <Chat messages={state.messages} chat={state.active}/>
+            </div>
+        </div></div>)
     }
 }
 

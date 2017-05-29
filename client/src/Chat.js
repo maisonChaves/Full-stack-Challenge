@@ -1,18 +1,90 @@
-export default function App({ children }) {
-    return (
-        <nav class="panel">
-            <a class="panel-block is-active">
-                <span class="panel-icon">
-                    <i class="fa fa-book"></i>
-                </span>
-                bulma
-            </a>
-            <a class="panel-block is-active">
-                <span class="panel-icon">
-                    <i class="fa fa-book"></i>
-                </span>
-                bulma
-            </a>
-        </nav>
-    );
+import Component from 'inferno-component';
+
+import Service from './Service';
+
+class Chat extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            chats: [],
+            text: ""
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({ chat: nextProps.chat });
+    }
+
+    handleChange(event) {
+        this.setState({ text: event.target.value });
+    }
+
+    handleSubmit(event) {
+        
+        var message = {
+            "chat_id": this.state.chat,
+            "text": this.state.text
+        }
+
+        Service.sendMessage(message)
+        .then(
+        res => {
+            this.setState({text: ""});
+        },
+        error => {
+            this.setState({
+                error: error
+            });
+        });
+
+        event.preventDefault();
+    }
+
+    render(props) {
+        let messages = props.messages;
+
+        return (
+            <div>
+                <div div class="columns is-multiline">
+                    {
+                        messages &&
+                        messages.map((message) => (
+                            <div className={message.from.username ? 'box column is-two-thirds has-text-right is-offset-one-third' : 'box column is-two-thirds'}>
+                                <strong>{message.from.username ? message.from.username : message.from.first_name + ' ' + message.from.last_name} </strong>
+                                <br />
+                                {' ' + message.text}
+                            </div>
+                        ))
+                    }
+                </div>
+                {
+                    messages &&
+                    <footer class="footer is-fullwidth">
+                        <form onSubmit={this.handleSubmit}>
+                            <div class="field">
+                                <p class="control">
+                                    <textarea
+                                        class="textarea"
+                                        placeholder="Type your message here..."
+                                        value={this.state.text}
+                                        onInput={this.handleChange}
+                                    ></textarea>
+                                </p>
+                            </div>
+                            <div class="field is-grouped">
+                                <p class="control">
+                                    <input class="button is-primary" type="submit" value="Submit" />
+                                </p>
+                            </div>
+                        </form>
+                    </footer>}
+            </div>);
+    }
 }
+
+export default Chat;

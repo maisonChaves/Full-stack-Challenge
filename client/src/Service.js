@@ -5,6 +5,25 @@ function getChats() {
         .then(_verifyResponse, _handleError);
 }
 
+function getChat(id) {
+    return fetch(`${API}chat/${id}`)
+        .then(_verifyResponse, _handleError);
+}
+
+function sendMessage(message) {
+
+    var post = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(message)
+    };
+
+    return fetch(`${API}sendMessage`, post)
+        .then(_verifyResponse, _handleError);
+}
+
 function _verifyResponse(res) {
     let contentType = res.headers.get('content-type');
 
@@ -23,6 +42,8 @@ function _handleError(error) {
 }
 
 const ApiService = {
-    getChats
+    getChats,
+    getChat, 
+    sendMessage
 };
 export default ApiService;

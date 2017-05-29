@@ -19,9 +19,7 @@ const routes = (
 	<Router history={ browserHistory }>
 		<Route component={ App }>
 			<Route path="/" component={ LoginForm } fb={FB} />
-			<Route component={ Chats } >
-				<Route path="/chats" component={Chat} />
-			</Route>
+			<Route path="/chats" component={ Chats } ></Route>
 		</Route>
 	</Router>
 );
