@@ -21,7 +21,7 @@ var body = new Body();
 var token = fs.readFileSync('.bot', 'utf8');
 var urlBase = 'https://api.telegram.org/bot' + token + '/';
 
-var server = http.createServer( function (req, res) {
+var server = http.createServer(function (req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'content-type');
   res.writeHead(200);
@@ -61,6 +61,24 @@ var setHeader = async(ctx, next) => {
   ctx.set('Access-Control-Allow-Headers', 'content-type');
 }
 
+var koaSSE = async(ctx, next) => {
+  
+  ctx.sseSetup = () => {
+    ctx.set('Content-Type', 'text/event-stream');
+    ctx.type = 'text/event-stream';
+    ctx.set('Cache-Control', 'no-cache');
+    ctx.set('Connection', 'keep-alive');
+    ctx.status = 200;
+  }
+
+  ctx.sseSend = (data) => {
+    ctx.body = "data: " + JSON.stringify(data) + "\n\n";
+  }
+
+  await next();
+}
+
+app.use(koaSSE);
 app.use(setHeader);
 
 router.get('/', (ctx) => {
@@ -79,9 +97,14 @@ router.post('/getUpdates', body, async(ctx, next) => {
     var message = result.message;
     message._id = message.message_id;
     await db.Message.save(message);
-    broadcast(message);
+    //broadcast(message);
+
+    clients.forEach((client) => {
+      client.sseSend(message);
+    });
+
   }
-  
+
   ctx.status = 200;
 });
 
@@ -112,9 +135,20 @@ router.get('/chat/:id', async(ctx, next) => {
 /**
  * URL de testes, remover
  */
-router.get('/send', cxt => {
+router.get('/send', ctx => {
   broadcast('Maison');
-  cxt.status = 200;
+  ctx.status = 200;
+});
+
+router.get('/stream', async (ctx, next) => {
+  await next();
+  ctx.set('Content-Type', 'text/event-stream');
+  ctx.type = 'text/event-stream';
+  ctx.set('Cache-Control', 'no-cache');
+  ctx.set('Connection', 'keep-alive');
+  clients.push(ctx);
+  ctx.sseSend('Ok');
+  
 })
 
 app

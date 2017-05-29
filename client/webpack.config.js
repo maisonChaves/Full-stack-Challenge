@@ -3,11 +3,10 @@ const webpack = require('webpack');
 module.exports = {
 	entry: './src/index.js',
 	output: {
-		path: '/',
 		filename: 'bundle.js',
 		publicPath: 'http://localhost:8080/'
 	},
-	//devtool: 'source-map',
+	devtool: 'source-map',
 	module: {
 		loaders: [{
 			test: /\.js$/,

@@ -50,6 +50,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server",
+    "build": "webpack",
     "lint": "eslint src"
   }
 }
