@@ -48,14 +48,14 @@ class Chat extends Component {
 
     render(props) {
         //let messages = props.messages;
-
+        var chatClass = 'chat box column is-two-thirds';
         return (
             <div>
                 <div div class="columns is-multiline">
                     {
                         this.state.messages &&
                         this.state.messages.map((message) => (
-                            <div className={message.from.username ? 'box column is-two-thirds has-text-right is-offset-one-third' : 'box column is-two-thirds'}>
+                            <div className={message.from.username ? chatClass + ' has-text-right is-offset-one-third' : chatClass}>
                                 <strong>{message.from.username ? message.from.username : message.from.first_name + ' ' + message.from.last_name} </strong>
                                 <br />
                                 {' ' + message.text}

@@ -41,11 +41,13 @@
     "config": "^1.26.1",
     "eslint-plugin-async-await": "0.0.0",
     "koa": "^2.2.0",
+    "koa-body": "^2.0.1",
     "koa-bodyparser": "^3.2.0",
     "koa-mongo": "^0.7.0",
     "koa-router": "^7.1.1",
     "mongodb": "^2.2.27",
     "request": "^2.81.0",
-    "request-promise": "^4.2.1"
+    "request-promise": "^4.2.1",
+    "sse": "0.0.6"
   }
 }
