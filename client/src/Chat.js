@@ -8,7 +8,6 @@ class Chat extends Component {
         super(props);
 
         this.state = {
-            chats: [],
             text: ""
         };
 
@@ -18,6 +17,7 @@ class Chat extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({ chat: nextProps.chat });
+        this.setState({ messages: nextProps.messages });
     }
 
     handleChange(event) {
@@ -34,6 +34,7 @@ class Chat extends Component {
         Service.sendMessage(message)
         .then(
         res => {
+            this.state.messages.push(res);
             this.setState({text: ""});
         },
         error => {
@@ -46,14 +47,14 @@ class Chat extends Component {
     }
 
     render(props) {
-        let messages = props.messages;
+        //let messages = props.messages;
 
         return (
             <div>
                 <div div class="columns is-multiline">
                     {
-                        messages &&
-                        messages.map((message) => (
+                        this.state.messages &&
+                        this.state.messages.map((message) => (
                             <div className={message.from.username ? 'box column is-two-thirds has-text-right is-offset-one-third' : 'box column is-two-thirds'}>
                                 <strong>{message.from.username ? message.from.username : message.from.first_name + ' ' + message.from.last_name} </strong>
                                 <br />
@@ -63,7 +64,7 @@ class Chat extends Component {
                     }
                 </div>
                 {
-                    messages &&
+                    this.state.messages &&
                     <footer class="footer is-fullwidth">
                         <form onSubmit={this.handleSubmit}>
                             <div class="field">
